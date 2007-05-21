@@ -1,0 +1,29 @@
+#!/usr/bin/ruby -pi
+
+# start only
+sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)(ish)?\s/) {|m|
+  match, year, month, day, space, start_hour, start_min = $~.to_a
+  start_time = Time.local(year, month, day, start_hour, start_min)
+  start_time.strftime("<%Y-%m-%d %a %H:%M>") + ' ' * (space.length-1)
+}
+
+# start+duration
+sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)\+(\d\d)(\d\d)/) {|m|
+  match, year, month, day, space, start_hour, start_min, hours, mins = $~.to_a
+  start_time = Time.local(year, month, day, start_hour, start_min)
+  mins_long  = (hours.to_i)*60 + mins.to_i
+  end_time   = start_time + mins_long*60
+  start_time.strftime("<%Y-%m-%d %a %H:%M>") +
+    '--' +
+  end_time.strftime("<%Y-%m-%d %a %H:%M>") +
+    space
+}
+
+# start-end
+sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)-(\d\d)(\d\d)/) {|m|
+  match, year, month, day, space, start_hour, start_min, end_hour, end_min = $~.to_a
+  start_time = Time.local(year, month, day, start_hour, start_min)
+  end_time   = Time.local(year, month, day, end_hour, end_min)
+  start_time.strftime("<%Y-%m-%d %a %H:%M>") + '--' +
+  end_time.strftime("<%Y-%m-%d %a %H:%M>") + ' '
+}
