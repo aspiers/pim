@@ -18,7 +18,7 @@ sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)\+(\d\d)(\d\d)\s+/) {|m|
 }
 
 # start-end
-sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)-(\d\d)(\d\d)/\s+) {|m|
+sub(/<(\d{4})-(\d\d)-(\d\d) \w{3}>(\s+)(\d\d)(\d\d)-(\d\d)(\d\d)\s+/) {|m|
   match, year, month, day, space, start_hour, start_min, end_hour, end_min = $~.to_a
   start_time = Time.local(year, month, day, start_hour, start_min)
   end_time   = Time.local(year, month, day, end_hour, end_min)
