@@ -1,0 +1,13 @@
+# -*- mode: sh -*-
+
+NOTES=
+for candidate in $ZDOTDIR/{ifolder,roaming}/notes; do
+    [ -e "$candidate" ] || continue
+    if [ -z "$NOTES" ]; then
+        NOTES="$candidate"
+    else
+        NOTES="$NOTES $candidate"
+    fi
+done
+
+[ -n "$NOTES" ] && export NOTES
