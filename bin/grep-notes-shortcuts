@@ -30,4 +30,12 @@ if [ -z "$NOTES" ]; then
     exit 1
 fi
 
+echo -e "# Title search\n"
+
+find $NOTES -type f | so | egrep "$@"
+
+#echo -e "\n`find $NOTES -type f | so | wc -l` files searched"
+
+echo -e "\n# Contents search:\n"
+
 egrep -r $switches "$@" $NOTES
