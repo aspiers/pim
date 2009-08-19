@@ -1,0 +1,6 @@
+#!/bin/sh
+
+dest=adamspiers.org:web/adamspiers.org/html/org/ics-b682b0d5-1598943d1120
+
+rsync -avz ~/ifolder/*.ics $dest/ifolder
+rsync -avz ~/roaming/*.ics $dest/roaming
