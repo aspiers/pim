@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
-dest=adamspiers.org:web/adamspiers.org/html/org/ics-b682b0d5-1598943d1120
-
-rsync -avz ~/ifolder/*.ics $dest/ifolder
-rsync -avz ~/roaming/*.ics $dest/roaming
+dest=adamspiers.org:web/adamspiers.org/html/org/b682b0d5-1598943d1120
+dsa
+rsync -avz ~/ifolder/*.{ics,org} $dest/ifolder
+rsync -avz ~/roaming/{*.{ics,org},TODO.html} $dest/roaming
