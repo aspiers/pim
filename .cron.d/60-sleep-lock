@@ -6,10 +6,11 @@
 
 read_localhost_nickname
 
+# Get to bed by 11:30pm
 case "$localhost_nickname" in
     atlantic|indian|pacific|southern)
         cat <<EOF
-00    23  *   *   *     DISPLAY=:0 quietrun xwrits t=0 b=30 ct=0 +multiply=8 +once
+00    23  *   *   *     DISPLAY=:0 quietrun xwrits-warn 1800 480
 30    23  *   *   *     DISPLAY=:0 quietrun xwrits-lock
 EOF
 
@@ -22,6 +23,7 @@ EOF
         ;;
 esac
 
+# Don't fuck around on facebook at breakfast
 case "$localhost_nickname" in
     southern)
         cat <<EOF
