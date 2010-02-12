@@ -1,0 +1,4 @@
+30    23  *   *   *     DISPLAY=:0 quietrun bedtime '12am tomorrow' '5am tomorrow'
+# Should only need this second one if I naughtily killed bedtime
+# process during warning phase.
+#*/1  0-5  *   *   *     DISPLAY=:0 quietrun bedtime 12am 5am 
