@@ -6,11 +6,11 @@
 
 read_localhost_nickname
 
-# Get to bed by 11:30pm
 # Note xwrits-warn is in seconds but xwrits-lock is in minutes
 case "$localhost_nickname" in
     atlantic|indian|pacific|southern)
         cat <<EOF
+# Get to bed by 11:30pm
 00    23  *   *   *     DISPLAY=:0 quietrun xwrits-warn 1800 480
 30    23  *   *   *     DISPLAY=:0 quietrun xwrits-lock 360
 EOF
@@ -24,10 +24,11 @@ EOF
         ;;
 esac
 
-# Don't fuck around on facebook at breakfast
 case "$localhost_nickname" in
     southern)
         cat <<EOF
+
+# Don't fuck around on facebook at breakfast
 00    10  *   *   *     DISPLAY=:0 quietrun xwrits-lock 60
 EOF
         ;;
