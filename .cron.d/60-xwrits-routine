@@ -7,11 +7,12 @@
 read_localhost_nickname
 
 # Get to bed by 11:30pm
+# Note xwrits-warn is in seconds but xwrits-lock is in minutes
 case "$localhost_nickname" in
     atlantic|indian|pacific|southern)
         cat <<EOF
 00    23  *   *   *     DISPLAY=:0 quietrun xwrits-warn 1800 480
-30    23  *   *   *     DISPLAY=:0 quietrun xwrits-lock
+30    23  *   *   *     DISPLAY=:0 quietrun xwrits-lock 360
 EOF
 
 # cat <<EOF
