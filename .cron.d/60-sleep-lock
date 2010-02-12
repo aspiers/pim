@@ -1,4 +1,25 @@
-30    23  *   *   *     DISPLAY=:0 quietrun bedtime '12am tomorrow' '5am tomorrow'
+#!/bin/sh
+#
+# %% Executable hook %%
+
+case "$localhost_nickname" in
+    atlantic|indian|pacific|southern)
+        cat <<EOF
+00    23  *   *   *     DISPLAY=:0 xwrits t=0 b=30 ct=0 +multiply=8 +once
+30    23  *   *   *     DISPLAY=:0 xwrits-lock
+
+#30    23  *   *   *     DISPLAY=:0 quietrun bedtime '12am tomorrow' '5am tomorrow'
 # Should only need this second one if I naughtily killed bedtime
 # process during warning phase.
 #*/1  0-5  *   *   *     DISPLAY=:0 quietrun bedtime 12am 5am 
+EOF
+        ;;
+esac
+
+case "$localhost_nickname" in
+    southern)
+        cat <<EOF
+00    10  *   *   *     DISPLAY=:0 xwrits-lock 60
+EOF
+        ;;
+esac
