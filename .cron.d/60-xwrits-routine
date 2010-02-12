@@ -11,15 +11,15 @@ case "$localhost_nickname" in
     atlantic|indian|pacific|southern)
         cat <<EOF
 # Get to bed by 11:30pm
-00    23  *   *   *     DISPLAY=:0 quietrun xwrits-warn 1800 480
-30    23  *   *   *     DISPLAY=:0 quietrun xwrits-lock 360
+00    23  *   *   *     run-with-local-X-display quietrun xwrits-warn 1800 480
+30    23  *   *   *     run-with-local-X-display quietrun xwrits-lock 360
 EOF
 
 # cat <<EOF
-# #30    23  *   *   *     DISPLAY=:0 quietrun bedtime '12am tomorrow' '5am tomorrow'
+# #30    23  *   *   *     run-with-local-X-display quietrun bedtime '12am tomorrow' '5am tomorrow'
 # # Should only need this second one if I naughtily killed bedtime
 # # process during warning phase.
-# #*/1  0-5  *   *   *     DISPLAY=:0 quietrun bedtime 12am 5am 
+# #*/1  0-5  *   *   *     run-with-local-X-display quietrun bedtime 12am 5am 
 # EOF
         ;;
 esac
@@ -29,7 +29,7 @@ case "$localhost_nickname" in
         cat <<EOF
 
 # Don't fuck around on facebook at breakfast
-00    10  *   *   *     DISPLAY=:0 quietrun xwrits-lock 60
+00    10  *   *   *     run-with-local-X-display quietrun xwrits-lock 60
 EOF
         ;;
 esac
