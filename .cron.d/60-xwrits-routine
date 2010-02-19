@@ -12,10 +12,10 @@ case "$localhost_nickname" in
         cat <<EOF
 # Get to bed by 11:30pm.  Start nagging at 11pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
-00    23  *   *   *     run-with-local-X-display quietrun timeout -z 6am xwrits typetime=0 breaktime=600 +multiply=10
+00    23  *   *   *     run-with-local-X-display quietrun timeout -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
 #
 # ... with a hard stop at 11:30pm.
-30    23  *   *   *     run-with-local-X-display quietrun timeout -z 6am xwrits typetime=0 breaktime=600 +lock
+30    23  *   *   *     run-with-local-X-display quietrun timeout -z '6am tomorrow' xwrits typetime=0 breaktime=600 +lock
 #
 # The -z option to timeout is necessary to keep quietrun from
 # complaining at 6am.
