@@ -2,7 +2,8 @@
 59     *  *   *   *     quietrun sync-org
 30     4  *   *   1     quietrun backup-oceanwharf
 
-# Lunchbreak by 12:30pm.  Start nagging at 12pm (note that xwrits canceltime defaults to 10 minutes) ...
+# Lunchbreak by 12:30pm.  Start nagging at 12pm (note that xwrits
+# canceltime defaults to 10 minutes) ...
 00    12  *   *   *     run-with-local-X-display quietrun timeout -z '12:30pm' xwrits typetime=0 breaktime=600 +multiply=10
 #
 # ... with a hard stop at 12:30pm.
