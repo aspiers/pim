@@ -29,10 +29,10 @@ case "$localhost_nickname" in
 
 # The old way of doing it - shut the computer down if I misbehave!
 #
-#30    23  *   *   *     run-with-local-X-display quietrun bedtime '12am tomorrow' '5am tomorrow'
+00    23  *   *   *     run-with-local-X-display quietrun bedtime '11:30pm' '5am tomorrow'
 # Should only need this second one if I naughtily killed bedtime
 # process during warning phase.
-#*/1  0-5  *   *   *     run-with-local-X-display quietrun bedtime 12am 5am 
+*/1  0-5  *   *   *     run-with-local-X-display quietrun bedtime 12am 5am 
 EOF
         ;;
 esac
