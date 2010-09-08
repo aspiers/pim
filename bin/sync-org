@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 
-dest=adamspiers.org:web/adamspiers.org/html/org/b682b0d5-1598943d1120
+dest_root=adamspiers.org:web/adamspiers.org/html/org
+dest_secure=$dest_root/b682b0d5-1598943d1120
+dest_dav=$dest_root/dav
 dsa
-rsync -avz ~/ifolder/*.{ics,org} $dest/ifolder
-rsync -avz ~/roaming/{*.{ics,org},TODO.html} $dest/roaming
+rsync -avz ~/ifolder/*.{ics,org} $dest_secure/ifolder
+rsync -avz ~/roaming/{*.{ics,org},TODO.html} $dest_secure/roaming
+
+# because tramp is too fucking incompetent to scp in behalf of org-mobile-push
+rsync -avz ~/roaming/org-mobile/ $dest_dav
