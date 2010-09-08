@@ -17,6 +17,10 @@ case "$localhost_nickname" in
 # ... with a hard stop at 12:30pm.
 30    12  *   *  1-5    run-with-local-X-display quietrun timeout -z '1:00pm' xwrits typetime=0 breaktime=600 +lock
 
+# ---------------------------
+00    12  *   *   *     run-with-local-X-display quietrun bedtime '12:30pm' '1pm'
+
+# ============================================================================
 # Get to bed by 11:30pm.  Start nagging at 11pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
 00    23  *   *   *     run-with-local-X-display quietrun timeout -v -l $HOME/.timeout.soft-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
@@ -27,6 +31,7 @@ case "$localhost_nickname" in
 # The -z option to timeout is necessary to keep quietrun from
 # complaining at 6am.
 
+# ---------------------------
 # The old way of doing it - shut the computer down if I misbehave!
 #
 00    23  *   *   *     run-with-local-X-display quietrun bedtime '11:30pm' '5am tomorrow'
