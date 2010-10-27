@@ -18,7 +18,7 @@ case "$localhost_nickname" in
 30    12  *   *  1-5    run-with-local-X-display quietrun timeout -z '1:00pm' xwrits typetime=0 breaktime=600 +lock
 
 # ---------------------------
-00    12  *   *   *     run-with-local-X-display quietrun bedtime '12:31pm' '1pm'
+00    12  *   *   *     run-with-local-X-display quietrun routine '12:31pm' '1pm'
 
 # ============================================================================
 # Get to bed by 11:30pm.  Start nagging at 11pm (note that xwrits
@@ -34,10 +34,10 @@ case "$localhost_nickname" in
 # ---------------------------
 # The old way of doing it - shut the computer down if I misbehave!
 #
-*     23  *   *   *     run-with-local-X-display quietrun bedtime '11:31pm' '5am tomorrow'
-# Should only need this second one if I naughtily killed bedtime
+*     23  *   *   *     run-with-local-X-display quietrun routine '11:31pm' '5am tomorrow'
+# Should only need this second one if I naughtily killed routine
 # process during warning phase.
-*/1  0-5  *   *   *     run-with-local-X-display quietrun bedtime 12am 5am 
+*/1  0-5  *   *   *     run-with-local-X-display quietrun routine 12am 5am 
 EOF
         ;;
 esac
