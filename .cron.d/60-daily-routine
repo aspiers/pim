@@ -34,7 +34,7 @@ case "$localhost_nickname" in
 # ---------------------------
 # The old way of doing it - shut the computer down if I misbehave!
 #
-00    23  *   *   *     run-with-local-X-display quietrun bedtime '11:31pm' '5am tomorrow'
+*     23  *   *   *     run-with-local-X-display quietrun bedtime '11:31pm' '5am tomorrow'
 # Should only need this second one if I naughtily killed bedtime
 # process during warning phase.
 */1  0-5  *   *   *     run-with-local-X-display quietrun bedtime 12am 5am 
