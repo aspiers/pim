@@ -1,3 +1,9 @@
 #!/bin/bash
 
-google calendar add --user adam.spiers@gmail.com "$@"
+read -p 'Enter event> ' event
+
+google calendar add --user adam.spiers@gmail.com "${event// @ / at }" 2>&1 | \
+    awk '{ print "* " $0 }
+         /^Event created: / {
+             system("url_handler.sh " substr($0, 16))
+         }'
