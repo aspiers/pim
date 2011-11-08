@@ -5,7 +5,7 @@ dest_secure=$dest_root/b682b0d5-1598943d1120
 dest_dav=$dest_root/dav
 dsa
 rsync -avz ~/ifolder/*.{ics,org} $dest_secure/ifolder
-rsync -avz ~/roaming/{*.{ics,org},TODO.html} $dest_secure/roaming
+rsync -avz ~/roaming/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/roaming
 
 # because tramp is too fucking incompetent to scp in behalf of org-mobile-push
 rsync -avz ~/roaming/org-mobile/ $dest_dav
