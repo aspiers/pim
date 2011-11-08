@@ -63,7 +63,7 @@ $out"
 $me running in dry run mode so won't initiate system shutdown.
 $out"
         alertme "$msg" &
-        #wall "$msg"
+        wall "$msg"
     fi
 }
 
