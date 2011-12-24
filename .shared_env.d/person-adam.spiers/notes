@@ -1,7 +1,7 @@
 # -*- mode: sh -*-
 
 NOTES=
-for candidate in $ZDOTDIR/{ifolder,roaming}/{notes,{TODO,DONE}.org}; do
+for candidate in $ZDOTDIR/{org,ifolder,roaming}/{notes,{TODO,DONE}.org}; do
     [ -e "$candidate" ] || continue
     if [ -z "$NOTES" ]; then
         NOTES="$candidate"
