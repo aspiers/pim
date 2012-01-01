@@ -8,4 +8,4 @@ dsa
 rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
 
 # because tramp is too fucking incompetent to scp in behalf of org-mobile-push
-rsync -avz ~/roaming/org-mobile/ $dest_dav
+rsync -avz ~/org/org-mobile/ $dest_dav
