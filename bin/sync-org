@@ -4,8 +4,19 @@ dest_root=adamspiers.org:web/adamspiers.org/html/org
 dest_secure=$dest_root/b682b0d5-1598943d1120
 dest_dav=$dest_root/dav
 dsa
-[ -d ~/folder ] && rsync -avz ~/ifolder/*.{ics,org} $dest_secure/ifolder
+
+div
+
+echo SUSE
+[ -d ~/folder ] && rsync -avz ~/SUSE/*.{ics,org} $dest_secure/SUSE
+
+div
+
+echo org
 rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
 
+div
+
+echo org-mobile
 # because tramp is too fucking incompetent to scp in behalf of org-mobile-push
 rsync -avz ~/org/org-mobile/ $dest_dav
