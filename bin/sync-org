@@ -18,5 +18,9 @@ rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
 div
 
 echo org-mobile
+
+unset COLUMNS
+emacs --batch --load ~/.emacs --eval '(org-mobile-push)'
+
 # because tramp is too fucking incompetent to scp in behalf of org-mobile-push
 rsync -avz ~/org/org-mobile/ $dest_dav
