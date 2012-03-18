@@ -1,26 +1,49 @@
 #!/usr/bin/env zsh
 
 dest_root=adamspiers.org:web/adamspiers.org/html/org
-dest_secure=$dest_root/b682b0d5-1598943d1120
+#dest_secure=$dest_root/b682b0d5-1598943d1120
 dest_dav=$dest_root/dav
+
 dsa
 
 div
 
-echo SUSE
-[ -d ~/folder ] && rsync -avz ~/SUSE/*.{ics,org} $dest_secure/SUSE
+# echo SUSE
+# [ -d ~/folder ] && rsync -avz ~/SUSE/*.{ics,org} $dest_secure/SUSE
+#
+# div
+#
+# echo org
+# rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
+#
+# div
 
-div
+echo -e "org-mobile-push ...\n"
 
-echo org
-rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
+if ! tmpdir=`mktemp --tmpdir -d sync-org.XXXXXXXXXXX`; then
+    echo "Failed to create temporary directory" >&2
+    exit 1
+fi
 
-div
-
-echo org-mobile
+cd "$tmpdir"
+cp ~/org/TODO.org .
+# Need to rename SUSE TODO to avoid clash with personal TODO
+cp ~/SUSE/TODO.org SUSE-TODO.org
 
 unset COLUMNS
-emacs --batch --load ~/.emacs --eval '(org-mobile-push)'
+export QUICK_EMACS=1
+lisp="
+    (let
+      ((org-mobile-agendas 'default)
+       (org-mobile-files '(\"$tmpdir\")))
+       ;; (org-agenda-text-search-extra-files '(\"$tmpdir/TODO.org\" \"$tmpdir/SUSE-TODO.org\"))
+      (org-mobile-push))
+"
+emacs --batch --load ~/.emacs --eval "$lisp"
+
+rm -rf "$tmpdir"
+
+#div
 
 # because tramp is too fucking incompetent to scp in behalf of org-mobile-push
-rsync -avz ~/org/org-mobile/ $dest_dav
+#rsync -avz --exclude=mobileorg.org ~/org/org-mobile/ $dest_dav
