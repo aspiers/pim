@@ -33,12 +33,11 @@ cp ~/SUSE/TODO.org SUSE-TODO.org
 unset COLUMNS
 export QUICK_EMACS=1
 lisp="
-    (let
-      ((org-mobile-agendas 'default)
-       (org-mobile-files '(\"$tmpdir\")))
-       ;; (org-agenda-text-search-extra-files '(\"$tmpdir/TODO.org\" \"$tmpdir/SUSE-TODO.org\"))
-      (org-mobile-push))
-"
+    (let ((org-mobile-files '(\"$tmpdir\"))
+          ;; Uncomment this for a quick test run
+          ;; (org-mobile-agendas 'default)
+         )
+      (org-mobile-push))"
 emacs --batch --load ~/.emacs --eval "$lisp"
 
 rm -rf "$tmpdir"
