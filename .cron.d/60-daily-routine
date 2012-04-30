@@ -47,7 +47,7 @@ EOF
     esac
 
     case "$localhost_nickname" in
-        southern)
+        southern|adriatic|mediacenter)
             cat <<EOF
 
 # Don't fuck around on facebook etc. for too long during workdays -
