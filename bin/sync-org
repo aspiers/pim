@@ -18,6 +18,11 @@ div
 #
 # div
 
+echo "Pulling latest ~/SUSE ..."
+(cd ~/SUSE; git pull)
+
+div
+
 echo -e "org-mobile-push ...\n"
 
 if ! tmpdir=`mktemp --tmpdir -d sync-org.XXXXXXXXXXX`; then
@@ -29,6 +34,7 @@ cd "$tmpdir"
 cp ~/org/TODO.org .
 # Need to rename SUSE TODO to avoid clash with personal TODO
 cp ~/SUSE/TODO.org SUSE-TODO.org
+cp ~/eventbook/design.org bandhand.org
 
 unset COLUMNS
 export QUICK_EMACS=1
@@ -39,6 +45,12 @@ lisp="
          )
       (org-mobile-push))"
 emacs --batch --load ~/.emacs --eval "$lisp"
+result=$?
+
+if [ $result != 0 ]; then
+    echo "emacs org-mobile-push failed; leaving $tmpdir for debugging." >&2
+    exit $result
+fi
 
 rm -rf "$tmpdir"
 
