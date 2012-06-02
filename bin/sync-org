@@ -44,7 +44,7 @@ lisp="
           ;; (org-mobile-agendas 'default)
          )
       (org-mobile-push))"
-emacs --batch --load ~/.emacs --eval "$lisp"
+nice -n19 emacs --batch --load ~/.emacs --eval "$lisp"
 result=$?
 
 if [ $result != 0 ]; then
