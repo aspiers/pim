@@ -1,5 +1,14 @@
 #!/usr/bin/env zsh
 
+# Copies various .org files into a tmp dir and then does
+# org-mobile-push from that tmp dir via tramp+scp to the
+# remote directory which is also served via webDAV.
+#
+# For org-mobile-pull, emacs reads from and writes to the remote
+# mobileorg.org inbox directly via tramp so no rsync is required.
+# Any new items captured via the Android app will then appear locally
+# in the file defined by `org-mobile-inbox-for-pull'
+
 dest_root=adamspiers.org:web/adamspiers.org/html/org
 #dest_secure=$dest_root/b682b0d5-1598943d1120
 dest_dav=$dest_root/dav
