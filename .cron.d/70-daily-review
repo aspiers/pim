@@ -7,7 +7,7 @@
 read_localhost_nickname
 
 case "$localhost_nickname" in
-    atlantic|indian)
+    pacific|indian)
         cat <<EOF
 0      7  *   *   *     quietrun run-with-local-X-display switch-feed-emacs -l < ~/lib/xmacro/org-agenda-daily-review
 EOF
