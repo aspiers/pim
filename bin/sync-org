@@ -48,10 +48,13 @@ cp ~/eventbook/design.org bandhand.org
 unset COLUMNS
 export QUICK_EMACS=1
 lisp="
-    (let ((org-mobile-files '(\"$tmpdir\"))
+    (let ((tramp-verbose 7)
+	  (org-mobile-files '(\"$tmpdir\"))
           ;; Uncomment this for a quick test run
           ;; (org-mobile-agendas 'default)
          )
+      (require 'org-mobile nil 'noerror)
+      ;;(message \"omd is %s\" org-mobile-directory)
       (org-mobile-push))"
 nice -n19 emacs --batch --load ~/.emacs --eval "$lisp"
 result=$?
