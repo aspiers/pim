@@ -27,10 +27,12 @@ div
 #
 # div
 
-echo "Pulling latest ~/SUSE ..."
-(cd ~/SUSE; git pull)
+if isup indian; then
+    echo "Pulling latest ~/SUSE ..."
+    (cd ~/SUSE; git pull 2>&1)
 
-div
+    div
+fi
 
 echo -e "org-mobile-push ...\n"
 
