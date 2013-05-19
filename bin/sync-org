@@ -43,6 +43,7 @@ fi
 
 cd "$tmpdir"
 cp ~/org/TODO.org .
+cp ~/org/notes/tango.org .
 # Need to rename SUSE TODO to avoid clash with personal TODO
 cp ~/SUSE/TODO.org SUSE-TODO.org
 cp ~/eventbook/design.org bandhand.org
