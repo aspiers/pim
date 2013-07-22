@@ -11,7 +11,7 @@ if which run-with-local-X-display >/dev/null 2>&1; then
     # Note xwrits-warn is in seconds but xwrits-lock is in minutes
     case "$localhost_nickname" in
         atlantic|indian|pacific|southern)
-            cat <<EOF
+            cat <<'EOF'
 # Lunchbreak by 12:30pm.  Start nagging at 12pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
 00    12  *   *   *     quietrun run-with-local-X-display -q timeout -z '12:30pm' xwrits typetime=0 breaktime=600 +multiply=10
@@ -27,10 +27,10 @@ if which run-with-local-X-display >/dev/null 2>&1; then
 # ============================================================================
 # Get to bed by 11:30pm.  Start nagging at 11pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
-00    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.timeout.soft-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
+00    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.log/timeout.soft-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
 #
 # ... with a hard stop at 11:30pm.
-30    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.timeout.hard-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +lock
+30    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.log/timeout.hard-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +lock
 #
 # The -z option to timeout is necessary to keep quietrun from
 # complaining at 6am.
