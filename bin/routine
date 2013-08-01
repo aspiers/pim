@@ -112,6 +112,9 @@ if [ $# -ne 2 ]; then
     usage
 fi
 
+set -x
+exec >>~/.log/routine.log 2>&1
+
 # We assume that running this script means the caller wants immediate
 # warnings about an approach hard threshold if there is an active session.
 # So the soft threshold starts at the time the script is run.
