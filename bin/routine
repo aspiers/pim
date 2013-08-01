@@ -55,11 +55,20 @@ soft_warning_zone () {
 hard_action_zone () {
     out=$( active-since "$hard" ) || return
 
+    hour="`date +%H`"
+    if [ "$hour" -lt 5 -o "$hour" -gt 22 ]; then
+        msg='Get to bed, asswipe!'
+    else
+        msg='Lunchtime, buttmunch!'
+    fi
+
     if [ -z "$dryrun" ]; then
-        sudo shutdown -h +1 "Get to bed, asswipe!
+        alertme "$msg
+$out" &
+        sudo shutdown -h +1 "$msg
 $out"
     else
-        msg="Get to bed, asswipe!
+        msg="$msg
 $me running in dry run mode so won't initiate system shutdown.
 $out"
         alertme "$msg" &
