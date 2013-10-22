@@ -2,8 +2,11 @@
 
 read -p 'Enter event> ' event
 
+# Needs http://code.google.com/p/googlecl/
+# Install via "mrco googlecl"
+
 google calendar add --user adam.spiers@gmail.com "${event// @ / at }" 2>&1 | \
     awk '{ print "* " $0 }
          /^Event created: / {
-             system("url_handler.sh " substr($0, 16))
+             system("url-handler " substr($0, 16))
          }'
