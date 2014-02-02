@@ -53,7 +53,7 @@ export QUICK_EMACS=1
 lisp="
     (let ((tramp-verbose 7)
           (debug-on-error t)
-	  (org-mobile-files '(\"$tmpdir\"))
+          (org-mobile-files '(\"$tmpdir\"))
           ;; Uncomment this for a quick test run
           ;; (org-mobile-agendas 'default)
          )
