@@ -1,31 +1,16 @@
 #!/usr/bin/env zsh
 
-# Copies various .org files into a tmp dir and then does
-# org-mobile-push from that tmp dir via tramp+scp to the
-# remote directory which is also served via webDAV.
+# Does org-mobile-push from ~/org/mobile via tramp+scp to the remote
+# directory.
 #
 # For org-mobile-pull, emacs reads from and writes to the remote
 # mobileorg.org inbox directly via tramp so no rsync is required.
 # Any new items captured via the Android app will then appear locally
 # in the file defined by `org-mobile-inbox-for-pull'
 
-dest_root=adamspiers.org:web/adamspiers.org/html/org
-#dest_secure=$dest_root/b682b0d5-1598943d1120
-dest_dav=$dest_root/dav
-
 dsa
 
 div
-
-# echo SUSE
-# [ -d ~/folder ] && rsync -avz ~/SUSE/*.{ics,org} $dest_secure/SUSE
-#
-# div
-#
-# echo org
-# rsync -avz ~/org/{*.{ics,org},notes/Packing.org,TODO.html} $dest_secure/org
-#
-# div
 
 if isup indian; then
     echo "Pulling latest ~/SUSE ..."
@@ -36,24 +21,14 @@ fi
 
 echo -e "org-mobile-push ...\n"
 
-if ! tmpdir=`mktemp --tmpdir -d sync-org.XXXXXXXXXXX`; then
-    echo "Failed to create temporary directory" >&2
-    exit 1
-fi
-
-cd "$tmpdir"
-cp ~/org/TODO.org .
-cp ~/org/notes/tango.org .
-# Need to rename SUSE TODO to avoid clash with personal TODO
-cp ~/SUSE/TODO.org SUSE-TODO.org
-cp ~/eventbook/design.org bandhand.org
+org_mobile_dir=$HOME/org/mobile
 
 unset COLUMNS
 export QUICK_EMACS=1
 lisp="
     (let ((tramp-verbose 7)
           (debug-on-error t)
-          (org-mobile-files '(\"$tmpdir\"))
+          (org-mobile-files '(\"$org_mobile_dir\"))
           ;; Uncomment this for a quick test run
           ;; (org-mobile-agendas 'default)
          )
@@ -64,13 +39,7 @@ nice -n19 emacs --batch --load ~/.emacs --eval "$lisp"
 result=$?
 
 if [ $result != 0 ]; then
-    echo "emacs org-mobile-push failed; leaving $tmpdir for debugging." >&2
-    exit $result
+    echo "emacs org-mobile-push failed." >&2
 fi
 
-rm -rf "$tmpdir"
-
-#div
-
-# because tramp is too fucking incompetent to scp in behalf of org-mobile-push
-#rsync -avz --exclude=mobileorg.org ~/org/org-mobile/ $dest_dav
+exit $result
