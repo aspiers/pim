@@ -28,6 +28,7 @@ export QUICK_EMACS=1
 lisp="
     (let ((tramp-verbose 7)
           (debug-on-error t)
+          (org-agenda-sticky nil) ;; seems to be a bug
           (org-mobile-files '(\"$org_mobile_dir\"))
           ;; Uncomment this for a quick test run
           ;; (org-mobile-agendas 'default)
