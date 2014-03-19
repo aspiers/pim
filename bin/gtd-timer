@@ -1,0 +1,147 @@
+#!/usr/bin/ruby
+#
+# Timer to help apply David Allen's two minute rule to processing of a
+# maildir-format email inbox.
+# Copyright (C) 2014 Adam Spiers
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# ---------------------------------------------------------------------
+#
+# Briefly, the idea is that when processing your inbox, for each email
+# you have a maximum of two minutes to either:
+#
+#   - perform any actions required by that email, or
+#
+#   - add any such actions to your TODO list, and move the email out
+#     of the inbox.  (Best practice is to move it to an archive folder
+#     and have a system for rapid retrieval of the email via the TODO
+#     list item, e.g. via a hyperlink which will retrieve the email
+#     based on its Message-Id: header, using an indexing mail search
+#     engine.)
+#
+# This simple timer program constantly monitors the number of emails
+# in the given maildir folder, and shows you how much of the two
+# minutes you have left to process the item you are currently looking
+# at.  Once you exceed the two minute budget, it will start beeping to
+# prod you to adhere to the rule.
+#
+# So for example if you have 30 mails in your inbox, using this timer
+# it should take you an absolute maximum of one hour to process them
+# all ("process" in the sense defined within David Allen's GTD
+# system).
+#
+# For mutt users, this approach can work nicely in conjunction with
+#
+#   https://github.com/aspiers/mutt.pub/blob/master/.mutt/common.d/96-GTD-FIFO
+#
+# which helps focus on a single mail thread at a time.
+#
+# Information on the two minute rule here:
+#
+#   http://www.success.com/article/1-on-1-david-allens-two-minute-rule
+#   http://lifehacker.com/use-the-two-minute-rule-to-stop-procrastinating-and-get-1521792128
+#
+# ---------------------------------------------------------------------
+
+# TODO: maybe display a cute ASCII progress bar, e.g.
+# https://github.com/jfelchner/ruby-progressbar
+#require 'ruby-progressbar'
+#
+# TODO: maybe also add optional support for a gtk UI or similar
+
+TIME_PER_ITEM     = 120 # 2 minute rule
+TARGET_MAIL_COUNT =   0 # what's the most mails we'll tolerate without nagging?
+
+ME = File.basename($0)
+
+def usage(msg=nil)
+  $stderr.puts(msg + "\n\n") if msg
+  $stderr.puts "Usage: #{ME} MAILDIR"
+end
+
+def parse_args
+  unless ARGV.length == 1
+    usage
+    exit 1
+  end
+
+  maildir = ARGV[0]
+  dirs = [maildir] + %w(cur new tmp).map { |d| File.join(maildir, d) }
+  unless dirs.all? { |d| File.directory? d }
+    usage "#{maildir} is not a valid maildir"
+    exit 1
+  end
+  puts "Using maildir: #{maildir}"
+
+  return maildir
+end
+
+def count_maildir(maildir)
+  Dir.glob("#{maildir}/{cur,new}/*").count { |file| File.file?(file) }
+end
+
+def beep
+  print "\a"
+end
+
+def display(time_remaining, mail_count)
+  extra_time = ""
+  if time_remaining.round < 0
+    beep
+    extra_time = "-"
+    time_remaining *= -1
+  end
+  minutes = time_remaining.round / 60
+  seconds = time_remaining.round % 60
+  puts "%s%d:%02d   %3d mails" % [extra_time, minutes, seconds, mail_count]
+end
+
+def monitor_maildir(maildir)
+  last_change = Time.now
+  last_mail_count = count_maildir(maildir)
+
+  puts "Initial mail count is #{last_mail_count}, target is #{TARGET_MAIL_COUNT}"
+
+  while true
+    time_since_last_change = Time.now - last_change
+    time_remaining = TIME_PER_ITEM - time_since_last_change
+    mail_count = count_maildir(maildir)
+    if mail_count < last_mail_count
+      processed = last_mail_count - mail_count
+      if mail_count > TARGET_MAIL_COUNT
+        puts "Processed #{processed} mails! (from #{last_mail_count} to #{mail_count})"
+      else
+        if TARGET_MAIL_COUNT == 0
+          puts "Congratulations, you emptied the mailbox!"
+        else
+          puts "Congratulations, you achieved your target of #{TARGET_MAIL_COUNT} mails!"
+        end
+      end
+      last_change = Time.now
+      last_mail_count = mail_count
+      next
+    end
+    last_mail_count = mail_count
+    display(time_remaining, mail_count) if last_mail_count > TARGET_MAIL_COUNT
+    sleep 1
+  end
+end
+
+def main
+  maildir = parse_args
+  monitor_maildir(maildir)
+end
+
+main
