@@ -54,15 +54,22 @@
 #   http://lifehacker.com/use-the-two-minute-rule-to-stop-procrastinating-and-get-1521792128
 #
 # ---------------------------------------------------------------------
+#
+# TODO list:
+#
+#   - Maybe display a cute ASCII progress bar, e.g.
+#     https://github.com/jfelchner/ruby-progressbar
+#
+#   - Maybe also add optional support for a gtk UI or similar
+#
+#   - Add logging of each session, so that over time I can collect
+#     statistics about how much mail I process, and how fast I am at
+#     it.  This would help estimate how much time needs to be set
+#     aside for processing mail, which is especially useful to know
+#     when returning from vacation to a bulging inbox!
 
 require 'optparse'
 require 'ostruct'
-
-# TODO: maybe display a cute ASCII progress bar, e.g.
-# https://github.com/jfelchner/ruby-progressbar
-#require 'ruby-progressbar'
-#
-# TODO: maybe also add optional support for a gtk UI or similar
 
 ME = File.basename($0)
 
