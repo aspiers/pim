@@ -55,37 +55,60 @@
 #
 # ---------------------------------------------------------------------
 
+require 'optparse'
+require 'ostruct'
+
 # TODO: maybe display a cute ASCII progress bar, e.g.
 # https://github.com/jfelchner/ruby-progressbar
 #require 'ruby-progressbar'
 #
 # TODO: maybe also add optional support for a gtk UI or similar
 
-TIME_PER_ITEM     = 120 # 2 minute rule
-TARGET_MAIL_COUNT =   0 # what's the most mails we'll tolerate without nagging?
-
 ME = File.basename($0)
 
-def usage(msg=nil)
-  $stderr.puts(msg + "\n\n") if msg
-  $stderr.puts "Usage: #{ME} MAILDIR"
+def usage(opt_parser, error=nil)
+  msg = opt_parser.help
+  msg = error + "\n\n" + msg if error
+  opt_parser.abort(msg)
 end
 
 def parse_args
-  unless ARGV.length == 1
-    usage
-    exit 1
+  opts = OpenStruct.new
+  opts.duration = 120 # 2 minute rule
+  opts.target = 0  # what's the most mails we'll tolerate without nagging?
+
+  opt_parser = OptionParser.new do |opt|
+    opt.banner = "Usage: #{ME} [OPTIONS] MAILDIR"
+    opt.on('-d', '--duration SECS', Integer,
+           "number of seconds allowed per mail [#{opts.limit}]") do
+      |duration|
+      opts.duration = duration
+    end
+    opt.on('-t', '--target NUMBER', Integer,
+           "number of mails you are aiming to " +
+           "reduce maildir to [#{opts.target}]") do
+      |target|
+      opts.target = target
+    end
+
+    opt.on('-h', '--help', 'Display this help') do
+      puts opt_parser
+      exit 0
+    end
   end
+
+  opt_parser.parse!
+
+  usage(opt_parser, "Must specify a maildir") unless ARGV.length == 1
 
   maildir = ARGV[0]
   dirs = [maildir] + %w(cur new tmp).map { |d| File.join(maildir, d) }
   unless dirs.all? { |d| File.directory? d }
-    usage "#{maildir} is not a valid maildir"
-    exit 1
+    usage(opt_parser, "#{maildir} is not a valid maildir")
   end
   puts "Using maildir: #{maildir}"
 
-  return maildir
+  return opts, maildir
 end
 
 def count_maildir(maildir)
@@ -120,17 +143,19 @@ def duration(secs)
   r
 end
 
-def monitor_maildir(maildir)
+def monitor_maildir(opts, maildir)
   start_time = Time.now
   initial_mail_count = count_maildir(maildir)
+  target = opts.target
+  target_str = "%d mail%s" % [ target, target == 1 ? '' : 's' ]
 
-  puts "Initial mail count is #{initial_mail_count}, target is #{TARGET_MAIL_COUNT}"
+  puts "Initial mail count is #{initial_mail_count}, target is #{target_str}"
 
   last_change = start_time
   last_mail_count = initial_mail_count
   while true
     time_since_last_change = Time.now - last_change
-    time_remaining = TIME_PER_ITEM - time_since_last_change
+    time_remaining = opts.duration - time_since_last_change
     mail_count = count_maildir(maildir)
     if mail_count < last_mail_count
       last_change = Time.now
@@ -138,21 +163,19 @@ def monitor_maildir(maildir)
       total_processed = initial_mail_count - mail_count
       total_elapsed = last_change - start_time
       average_velocity = total_elapsed / total_processed
-      target = "%d mail%s" %
-        [ TARGET_MAIL_COUNT, TARGET_MAIL_COUNT == 1 ? '' : 's' ]
-      if mail_count > TARGET_MAIL_COUNT
+      if mail_count > target
         puts "Processed %d mail%s in %ds!" %
           [ processed, processed == 1 ? '' : 's', time_since_last_change ]
         puts "Average velocity now %s per mail" % duration(average_velocity)
         expected_duration = average_velocity * mail_count
         eta = Time.now + expected_duration
         puts "At this rate you will hit your target of %s in %s, at %s" %
-          [ target, duration(expected_duration), eta ]
+          [ target_str, duration(expected_duration), eta ]
       else
-        if TARGET_MAIL_COUNT == 0
+        if mail_count == 0
           puts "Congratulations, you emptied the mailbox!"
         else
-          puts "Congratulations, you achieved your target of #{target}!"
+          puts "Congratulations, you achieved your target of #{target_str}!"
         end
         puts "Average velocity was %s per mail" % duration(average_velocity)
       end
@@ -160,14 +183,14 @@ def monitor_maildir(maildir)
       next
     end
     last_mail_count = mail_count
-    display(time_remaining, mail_count) if last_mail_count > TARGET_MAIL_COUNT
+    display(time_remaining, mail_count) if last_mail_count > target
     sleep 1
   end
 end
 
 def main
-  maildir = parse_args
-  monitor_maildir(maildir)
+  opts, maildir = parse_args
+  monitor_maildir(opts, maildir)
 end
 
 main
