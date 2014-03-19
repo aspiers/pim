@@ -97,39 +97,65 @@ def beep
 end
 
 def display(time_remaining, mail_count)
+  puts "%s   %3d mails" % [mins_secs(time_remaining), mail_count]
+end
+
+def mins_secs(secs)
   extra_time = ""
-  if time_remaining.round < 0
+  if secs.round < 0
     beep
     extra_time = "-"
-    time_remaining *= -1
+    secs *= -1
   end
-  minutes = time_remaining.round / 60
-  seconds = time_remaining.round % 60
-  puts "%s%d:%02d   %3d mails" % [extra_time, minutes, seconds, mail_count]
+  minutes = secs.round / 60
+  seconds = secs.round % 60
+  "%s%d:%02d" % [extra_time, minutes, seconds]
+end
+
+def duration(secs)
+  minutes = secs.round / 60
+  seconds = secs.round % 60
+  r = "#{seconds}s"
+  r = "#{minutes}m " + r if minutes > 0
+  r
 end
 
 def monitor_maildir(maildir)
-  last_change = Time.now
-  last_mail_count = count_maildir(maildir)
+  start_time = Time.now
+  initial_mail_count = count_maildir(maildir)
 
-  puts "Initial mail count is #{last_mail_count}, target is #{TARGET_MAIL_COUNT}"
+  puts "Initial mail count is #{initial_mail_count}, target is #{TARGET_MAIL_COUNT}"
 
+  last_change = start_time
+  last_mail_count = initial_mail_count
   while true
     time_since_last_change = Time.now - last_change
     time_remaining = TIME_PER_ITEM - time_since_last_change
     mail_count = count_maildir(maildir)
     if mail_count < last_mail_count
+      last_change = Time.now
       processed = last_mail_count - mail_count
+      total_processed = initial_mail_count - mail_count
+      total_elapsed = last_change - start_time
+      average_velocity = total_elapsed / total_processed
+      target = "%d mail%s" %
+        [ TARGET_MAIL_COUNT, TARGET_MAIL_COUNT == 1 ? '' : 's' ]
       if mail_count > TARGET_MAIL_COUNT
-        puts "Processed #{processed} mails! (from #{last_mail_count} to #{mail_count})"
+        puts "Processed %d mail%s in %ds!" %
+          [ processed, processed == 1 ? '' : 's', time_since_last_change ]
+        puts "Average velocity now %s per mail" % duration(average_velocity)
+        expected_duration = average_velocity * mail_count
+        eta = Time.now + expected_duration
+        puts "At this rate you will hit your target of %s in %s, at %s" %
+          [ target, duration(expected_duration), eta ]
       else
         if TARGET_MAIL_COUNT == 0
           puts "Congratulations, you emptied the mailbox!"
         else
-          puts "Congratulations, you achieved your target of #{TARGET_MAIL_COUNT} mails!"
+          puts "Congratulations, you achieved your target of #{target}!"
         end
+        puts "Average velocity was %s per mail" % duration(average_velocity)
       end
-      last_change = Time.now
       last_mail_count = mail_count
       next
     end
