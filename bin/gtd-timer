@@ -153,7 +153,7 @@ def monitor_maildir(opts, maildir)
 
   last_change = start_time
   last_mail_count = initial_mail_count
-  while true
+  while last_mail_count > target
     time_since_last_change = Time.now - last_change
     time_remaining = opts.duration - time_since_last_change
     mail_count = count_maildir(maildir)
@@ -178,6 +178,7 @@ def monitor_maildir(opts, maildir)
           puts "Congratulations, you achieved your target of #{target_str}!"
         end
         puts "Average velocity was %s per mail" % duration(average_velocity)
+        break
       end
       last_mail_count = mail_count
       next
