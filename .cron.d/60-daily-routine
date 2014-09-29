@@ -14,10 +14,13 @@ if which run-with-local-X-display >/dev/null 2>&1; then
             cat <<'EOF'
 # Lunchbreak by 12:30pm.  Start nagging at 12pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
-00    12  *   *  1-5    quietrun run-with-local-X-display -q timeout -z '12:30pm' xwrits typetime=0 breaktime=600 +multiply=10
+00    12  *   *  1-5    quietrun run-with-local-X-display -q atimeout -z '12:30pm' xwrits typetime=0 breaktime=600 +multiply=10
 #
 # ... with a hard stop at 12:30pm.
-30    12  *   *  1-5    quietrun run-with-local-X-display -q timeout -z '1:00pm' xwrits typetime=0 breaktime=600 +lock
+30    12  *   *  1-5    quietrun run-with-local-X-display -q atimeout -z '1:00pm' xwrits typetime=0 breaktime=600 +lock
+#
+# The -z option to atimeout is necessary to keep quietrun from
+# complaining at 6am.
 
 # ---------------------------
 # The old way of doing it - shut the computer down if I misbehave!
@@ -27,13 +30,10 @@ if which run-with-local-X-display >/dev/null 2>&1; then
 # ============================================================================
 # Get to bed by 11:30pm.  Start nagging at 11pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
-00    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.log/timeout.soft-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
+00    23  *   *   *     quietrun run-with-local-X-display -q atimeout -v -l $HOME/.log/atimeout/soft-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +multiply=10
 #
 # ... with a hard stop at 11:30pm.
-30    23  *   *   *     quietrun run-with-local-X-display -q timeout -v -l $HOME/.log/timeout.hard-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +lock
-#
-# The -z option to timeout is necessary to keep quietrun from
-# complaining at 6am.
+30    23  *   *   *     quietrun run-with-local-X-display -q atimeout -v -l $HOME/.log/atimeout/hard-bedtime.$$ -z '6am tomorrow' xwrits typetime=0 breaktime=600 +lock
 
 # ---------------------------
 # The old way of doing it - shut the computer down if I misbehave!
@@ -53,7 +53,7 @@ EOF
 # Don't fuck around on facebook etc. for too long during workdays -
 # 20 minutes every 3 hours sounds about right.  +quota allows the 20
 # minutes to be spread over the 3 hours.
-30    09  *   *  1-5    quietrun run-with-local-X-display -q timeout -z 6pm xwrits typetime=20 breaktime=180 +multiply=600 +quota +lock
+30    09  *   *  1-5    quietrun run-with-local-X-display -q atimeout -z 6pm xwrits typetime=20 breaktime=180 +multiply=600 +quota +lock
 EOF
             ;;
     esac
