@@ -40,7 +40,7 @@ if which run-with-local-X-display >/dev/null 2>&1; then
 *     23  *   *   *     quietrun run-with-local-X-display -q routine '11:31pm' '5am tomorrow'
 # Should only need this second one if I naughtily killed routine
 # process during warning phase.
-*/1  0-5  *   *   *     quietrun run-with-local-X-display -q routine 12am 5am 
+*/1  0-5  *   *   *     quietrun run-with-local-X-display -q routine 12am 5am
 
 # Don't fuck around on facebook etc. for too long during workdays -
 # 20 minutes every 3 hours sounds about right.  +quota allows the 20
