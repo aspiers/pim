@@ -9,9 +9,8 @@ read_localhost_nickname
 if which run-with-local-X-display >/dev/null 2>&1; then
 
     # Note xwrits-warn is in seconds but xwrits-lock is in minutes
-    case "$localhost_nickname" in
-        atlantic|indian|pacific|southern)
-            cat <<'EOF'
+    if grep -q '^routine$' ~/.localhost-props; then
+        cat <<'EOF'
 # Lunchbreak by 12:30pm.  Start nagging at 12pm (note that xwrits
 # canceltime defaults to 10 minutes) ...
 00    12  *   *  1-5    quietrun run-with-local-X-display -q atimeout -z '12:30pm' xwrits typetime=0 breaktime=600 +multiply=10
@@ -42,13 +41,6 @@ if which run-with-local-X-display >/dev/null 2>&1; then
 # Should only need this second one if I naughtily killed routine
 # process during warning phase.
 */1  0-5  *   *   *     quietrun run-with-local-X-display -q routine 12am 5am 
-EOF
-            ;;
-    esac
-
-    case "$localhost_nickname" in
-        southern|adriatic|mediacenter)
-            cat <<EOF
 
 # Don't fuck around on facebook etc. for too long during workdays -
 # 20 minutes every 3 hours sounds about right.  +quota allows the 20
