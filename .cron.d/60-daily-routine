@@ -47,6 +47,5 @@ if which run-with-local-X-display >/dev/null 2>&1; then
 # minutes to be spread over the 3 hours.
 30    09  *   *  1-5    quietrun run-with-local-X-display -q atimeout -z 6pm xwrits typetime=20 breaktime=180 +multiply=600 +quota +lock
 EOF
-            ;;
-    esac
+    fi
 fi
