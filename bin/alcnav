@@ -1,0 +1,5 @@
+#!/bin/sh
+
+here=`dirname $0`
+
+adb logcat | lnav -f "$here/alogcat.lnav" -q

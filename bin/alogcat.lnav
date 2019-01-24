@@ -1,0 +1,37 @@
+#
+# @synopsis: alogcat-filters
+# @description: Filter Android phone logs for interesting events
+#
+
+:filter-out A2dp
+:filter-out AidRouting
+:filter-out Amazon
+:filter-out AodBattery
+:filter-out Avrcp
+:filter-out Bluetooth.*
+:filter-out ColorBalance
+:filter-out Embryo_Uterus
+:filter-out Fingerprint
+:filter-out FirewallController
+:filter-out GH\.(Wifi
+:filter-out Headset
+:filter-out Nearby
+:filter-out Nfc
+:filter-out Notification
+:filter-out RegisteredAidCache
+:filter-out Sdl 
+:filter-out SearchService
+:filter-out SingleNotificationView
+:filter-out StatusBar
+:filter-out Tile
+:filter-out TrafficUsage
+:filter-out TrustAgent
+:filter-out VnAutoLaunch)
+:filter-out WidgetView
+:filter-out Wifi
+:filter-out bt_
+:filter-out chatty
+:filter-out com\.lovestruck
+:filter-out readitlater
+:filter-out vendor\.qti
+:filter-out wpa_supplicant
