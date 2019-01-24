@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Run scanimage -A for all available options
+#
+# A4 is actually 297x210mm, but for some weird reason my scanner
+# defaults to 381x215.9mm (according to scanimage -A).
+#
+scanimage \
+    -x 210 -y 290 \
+    --length-measurement Approximate \
+    "$@"
+
