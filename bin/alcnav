@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# First make sure you have
+# https://github.com/aspiers/lnav-formats/blob/master/alogcat.json installed!
+
 here=`dirname $0`
 
 adb logcat | lnav -f "$here/alogcat.lnav" -q
