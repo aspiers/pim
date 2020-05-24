@@ -12,12 +12,12 @@ dsa
 
 div
 
-if isup indian; then
-    echo "Pulling latest ~/SUSE ..."
-    (cd ~/SUSE; git pull 2>&1)
-
-    div
-fi
+# if isup arabian; then
+#     echo "Pulling latest ~/Blocko ..."
+#     (cd ~/Blocko; git pull 2>&1)
+# 
+#     div
+# fi
 
 echo -e "org-mobile-push ...\n"
 
