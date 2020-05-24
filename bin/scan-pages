@@ -1,0 +1,49 @@
+#!/bin/bash
+
+me=`basename $0`
+
+if [ -z "$1" ]; then
+    echo "Usage: $me OUTPUT-PREFIX" >&2
+    exit 1
+fi
+
+prefix="$1"
+
+# ADF jams horribly with receipts and staples
+adf_opts=(
+    --source ADF
+    --length-measurement Approximate
+)
+flatbed_opts=(
+    --source Flatbed
+    --batch-prompt
+)
+
+scan-HP-C410b \
+    --format=tiff \
+    --resolution=200 \
+    "${flatbed_opts[@]}" \
+    --batch-scan=yes \
+    --batch-start=50 \
+    --batch-increment=5 \
+    --batch=$prefix-%02d.tiff \
+    --progress
+
+ret=$?
+
+case $ret in
+    0)
+        : all good
+        ;;
+    7)
+        : Document feeder out of documents? Proceed as normal
+        ;;
+    *)
+        exit $ret
+        ;;
+esac
+
+shopt -s nullglob
+for tiff in $prefix-*.tiff; do
+    convert $tiff ${tiff%.tiff}.jpg && rm $tiff
+done
