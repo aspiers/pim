@@ -4,3 +4,6 @@ grep-notes-shortcuts
 
 ~/.cfg-post.d/cron
 mkdir -p ~/.log/atimeout
+
+systemctl --user enable sync-org.service
+systemctl --user start sync-org.service

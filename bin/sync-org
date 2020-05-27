@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd ~/org
+
+while true; do
+    git auto-commit -d -m 20
+
+    # Do a sync regardless of whether auto-commit did anything,
+    # because another remote may have pushed changes to our
+    # synced/master branch.
+    git \
+        -c remote.indian.annex-ignore=true \
+        annex sync
+    sleep 60
+done
