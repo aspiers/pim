@@ -1,4 +1,4 @@
 [Service]
 ExecStart=/bin/sh -c ${HOME}/bin/sync-org
 Restart=always
-NoNewPrivileges=false
+NoNewPrivileges=true
