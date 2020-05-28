@@ -74,6 +74,11 @@ def get_hostname():
         return os.getenv("HOST") or os.getenv("HOSTNAME")
 
 
+def quit(msg):
+    logging.debug(msg)
+    sys.exit(1)
+
+
 class GitAutoCommitter:
     def __init__(self, repo_path, min_age):
         self.repo_path = repo_path
@@ -107,8 +112,7 @@ class GitAutoCommitter:
         if staged > 0:
             self.commit_changes()
         else:
-            logging.debug("Nothing to commit")
-            sys.exit(1)
+            quit("Nothing to commit")
 
     def stage_changes(self):
         staged = 0
@@ -259,8 +263,7 @@ def main():
     gac = GitAutoCommitter(options.repo_path, options.min_age)
 
     if gac.any_staged_changes():
-        logging.debug("\nAborting due to staged changes")
-        sys.exit(1)
+        quit("\nAborting due to staged changes")
 
     logging.debug("")
     gac.auto_commit_changes()
