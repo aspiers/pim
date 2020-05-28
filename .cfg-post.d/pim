@@ -5,5 +5,8 @@ grep-notes-shortcuts
 ~/.cfg-post.d/cron
 mkdir -p ~/.log/atimeout
 
-systemctl --user enable sync-org.service
-systemctl --user start sync-org.service
+for svc in sync commit; do
+    unit=auto-$svc-org.service
+    systemctl --user enable $unit
+    systemctl --user start $unit
+done

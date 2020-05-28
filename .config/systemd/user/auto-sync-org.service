@@ -1,0 +1,8 @@
+[Service]
+ExecStart=/bin/sh -c "${HOME}/bin/auto-sync-daemon ${HOME}/org"
+Restart=always
+NoNewPrivileges=true
+SyslogIdentifier=auto-sync-org
+
+[Install]
+WantedBy=multi-user.target
