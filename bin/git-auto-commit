@@ -163,7 +163,8 @@ class GitAutoCommitter:
             #     fl = " ".join(get_status_flags(flags))
             #     logging.debug(f"Not staging {filepath} with flags {fl}")
 
-        self.repo.index.write()
+        if staged > 0:
+            self.repo.index.write()
         return staged
 
     def config_get(self, name):
