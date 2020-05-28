@@ -79,13 +79,25 @@ def quit(msg):
     sys.exit(1)
 
 
+def abort(msg):
+    logging.error(msg)
+    sys.exit(1)
+
+
 class GitAutoCommitter:
     def __init__(self, repo_path, min_age):
         self.repo_path = repo_path
-        self.repo = pygit2.Repository(repo_path)
         self.min_age = datetime.timedelta(seconds=min_age)
         logging.debug("GitAutoCommitter with min age %ds on repo %s"
                       % (int(self.min_age.total_seconds()), self.repo_path))
+        self.repo = pygit2.Repository(repo_path)
+        self.check_config()
+
+    def check_config(self):
+        if self.config_get("user.name") is None:
+            abort("user.name is not set in git config; aborting!")
+        if self.config_get("user.email") is None:
+            abort("user.name is not set in git config; aborting!")
 
     def any_staged_changes(self):
         found_changes = False
