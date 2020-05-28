@@ -145,6 +145,7 @@ class GitAutoCommitter:
             # https://github.com/libgit2/pygit2/blob/320ee5e733039d4a3cc952b287498dbc5737c353/src/pygit2.c#L312-L320
             if flags & pygit2.GIT_STATUS_WT_NEW:
                 self.stage_file(filepath, "new")
+                staged += 1
             elif flags & pygit2.GIT_STATUS_WT_MODIFIED:
                 commit_age = self.time_since_last_commit(filepath)
                 file_age = self.time_since_mtime(filepath)
