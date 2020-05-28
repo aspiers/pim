@@ -17,7 +17,9 @@ try_sync () {
     if detect_ssh_agent; then
         # Do a sync regardless of whether auto-commit did anything,
         # because another remote may have pushed changes to our
-        # synced/master branch.
+        # synced/master branch.  First give other remotes a chance
+        # to completely finish their push, just in case of any races.
+        sleep 5
         git \
              -c remote.indian.annex-ignore=true \
              annex sync
