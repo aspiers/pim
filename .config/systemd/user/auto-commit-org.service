@@ -1,5 +1,5 @@
 [Service]
-ExecStart=/bin/sh -c "${HOME}/bin/auto-commit-daemon -d ${HOME}/org 60 300"
+ExecStart=/bin/sh -c "${HOME}/bin/auto-commit-daemon ${HOME}/org 60 300"
 Restart=always
 NoNewPrivileges=true
 SyslogIdentifier=auto-commit-org
