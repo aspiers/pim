@@ -138,9 +138,6 @@ class GitAutoCommitter:
                 logging.debug(f"# {filepath} ignored by git")
                 continue
 
-            if self.under_edit(filepath):
-                continue
-
             # Flags can be found here:
             # https://github.com/libgit2/pygit2/blob/320ee5e733039d4a3cc952b287498dbc5737c353/src/pygit2.c#L312-L320
             if flags & pygit2.GIT_STATUS_WT_NEW:
@@ -205,17 +202,6 @@ class GitAutoCommitter:
         dirname, filename = os.path.split(filepath)
         if filename.startswith(".#"):
             # emacs lock file
-            return True
-
-        return False
-
-    def under_edit(self, filepath):
-        dirname, filename = os.path.split(filepath)
-
-        emacs_lock = os.path.join(self.repo_path, dirname, ".#" + filename)
-        if os.path.lexists(emacs_lock):
-            logging.debug(
-                f"# Ignoring {filepath} due to emacs lock file {emacs_lock}")
             return True
 
         return False
