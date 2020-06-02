@@ -38,8 +38,17 @@ EOF
 
     repo_dir="$1"
     cd "$repo_dir"
-    if ! [[ -d .git ]]; then
-        echo >&2 ".git not found in `pwd`; aborting!"
+
+    if [[ -e HEAD ]] && [[ -e info ]] && [[ -e objects ]] && [[ -e refs ]] &&
+           [[ -e branches ]]
+    then
+        mode=bare
+        git_dir=.
+    elif [[ -d .git ]]; then
+        mode=worktree
+        git_dir=.git
+    else
+        echo >&2 "`pwd` isn't a git repo; aborting!"
         exit 1
     fi
 
@@ -55,7 +64,7 @@ EOF
                 -q -r \
                 --include "/($BRANCH|synced/($BRANCH|git-annex))\$" \
                 -e create -e modify -e move -e delete \
-                ".git/refs/heads" |
+                "$git_dir/refs/heads" |
             process_inotify_batch
     done
 }
