@@ -52,6 +52,10 @@ EOF
         exit 1
     fi
 
+    # Do this at startup to allow easy checking at startup time that
+    # the agent was detected correct.
+    detect_ssh_agent
+
     # This was a massive PITA to get right.  It seems that if you
     # specify specific files then it will look up the inodes on
     # start-up and only monitor those.  There's some similar weirdness
