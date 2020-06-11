@@ -1,4 +1,3 @@
 #!/bin/bash
 
-jcfuu auto-* -n 1000 | \
-    lnav -q -c ':goto -20'
+exec auj "$@"
