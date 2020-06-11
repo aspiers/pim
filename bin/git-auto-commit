@@ -263,7 +263,7 @@ def main():
     gac = GitAutoCommitter(options.repo_path, options.min_age)
 
     if gac.any_staged_changes():
-        quit("\nAborting due to staged changes")
+        abort("Aborting due to staged changes")
 
     logging.debug("")
     gac.auto_commit_changes()
