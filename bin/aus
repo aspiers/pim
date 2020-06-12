@@ -1,3 +1,8 @@
 #!/bin/bash
 
 systemctl --user status auto-{sync,commit}-\*
+
+cd ~/org
+echo
+export GIT_PAGER_MODE=none
+ggl1 -n5
