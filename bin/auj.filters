@@ -1,3 +1,4 @@
+# These are (at least mostly) not needed now we have git-annex-clean-sync
 
 # :filter-out auto-sync-org\[\d+\]: remote: error: refusing to update checked out branch: refs/heads/master
 # :filter-out auto-sync-org\[\d+\]: To ssh://aegean-wifi/home/adam/org
