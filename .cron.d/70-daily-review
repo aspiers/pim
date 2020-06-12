@@ -6,9 +6,8 @@
 
 read_localhost_nickname
 
-case "$localhost_nickname" in
-    pacific)
-        cat <<EOF
+if grep -q "^routine\$" ~/.localhost-props; then
+    cat <<EOF
 0      7  *   *   *     quietrun run-with-local-X-display -q switch-feed-emacs -l < ~/lib/xmacro/org-agenda-daily-review
 EOF
-esac
+fi
