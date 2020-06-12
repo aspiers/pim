@@ -27,6 +27,11 @@ try_sync () {
 }
 
 main () {
+    if ! inotifywait --help | grep -q -- '--include'; then
+        echo >&2 "inotifywait doesn't support --include; aborting!"
+        exit 1
+    fi
+
     if [ $# != 1 ]; then
         cat <<EOF >&2
 Usage: $(basename $me) REPO-DIR
