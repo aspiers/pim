@@ -1,6 +1,6 @@
 #!/bin/bash
 
-systemctl --user status auto-{sync,commit}-\*
+systemctl --user --no-pager status auto-{sync,commit}-\*
 
 cd ~/org
 echo
