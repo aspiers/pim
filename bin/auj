@@ -1,4 +1,11 @@
 #!/bin/bash
 
-jcfuu auto-* -n 1000 | \
-    lnav -q -c ':goto -20'
+# if ! groups | grep -q systemd-journal; then
+#     echo >&2 "Need to be in systemd-journal group; aborting!"
+#     exit 1
+# fi
+
+jcfuu 'auto-*' -n 1000 | \
+    lnavf \
+        -f $0.filters \
+        "$@"
