@@ -65,6 +65,10 @@ def file_is_staged(flags):
                     | pygit2.GIT_STATUS_INDEX_DELETED)
 
 
+def file_is_conflicted(flags):
+    return flags & pygit2.GIT_STATUS_CONFLICTED
+
+
 def get_hostname():
     nick_file = os.path.expanduser("~/.localhost-nickname")
     if os.path.isfile(nick_file):
@@ -99,8 +103,8 @@ class GitAutoCommitter:
         if self.config_get("user.email") is None:
             abort("user.name is not set in git config; aborting!")
 
-    def any_staged_changes(self):
-        found_changes = False
+    def manual_attention_required(self):
+        found_issues = False
         for filepath, flags in self.process_files():
             if not filepath.endswith(".org"):
                 # logging.debug(f"# {filepath} not an .org file")
@@ -113,11 +117,14 @@ class GitAutoCommitter:
             st = get_status_output(flags)
             if file_is_staged(flags):
                 logging.debug(f"{st} {filepath}\t\t<-- staged")
-                found_changes = True
+                found_issues = True
+            elif file_is_conflicted(flags):
+                logging.debug(f"{st} {filepath}\t\t<-- conflicted")
+                found_issues = True
             else:
                 logging.debug(f"{st} {filepath}")
 
-        return found_changes
+        return found_issues
 
     def auto_commit_changes(self):
         staged = self.stage_changes()
@@ -262,8 +269,8 @@ def main():
 
     gac = GitAutoCommitter(options.repo_path, options.min_age)
 
-    if gac.any_staged_changes():
-        abort("Aborting due to staged changes")
+    if gac.manual_attention_required():
+        abort("Manual attention required; aborting.")
 
     logging.debug("")
     gac.auto_commit_changes()
