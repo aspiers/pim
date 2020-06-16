@@ -1,6 +1,6 @@
 #!/bin/bash
 
-systemctl --user --no-pager status auto-{sync,commit}-\*
+austa
 
 cd ~/org
 echo
