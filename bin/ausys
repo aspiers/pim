@@ -1,5 +1,0 @@
-#!/bin/bash
-
-systemctl list-unit-files --user |
-    awk '/^auto-(sync|commit)-[^ ]+\.service/ {print $1}' |
-    xargs systemctl --user --no-pager "$@"

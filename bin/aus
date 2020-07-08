@@ -1,8 +1,0 @@
-#!/bin/bash
-
-austa
-
-cd ~/org
-echo
-export GIT_PAGER_MODE=none
-ggl1 -n5
