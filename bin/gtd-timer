@@ -68,6 +68,7 @@
 #     aside for processing mail, which is especially useful to know
 #     when returning from vacation to a bulging inbox!
 
+require 'open3'
 require 'optparse'
 require 'ostruct'
 
@@ -82,14 +83,32 @@ end
 def parse_args
   opts = OpenStruct.new
   opts.duration = 120 # 2 minute rule
+  opts.maildir = nil
+  opts.profile = nil
+  opts.sleep = 2
   opts.target = 0  # what's the most mails we'll tolerate without nagging?
 
   opt_parser = OptionParser.new do |opt|
-    opt.banner = "Usage: #{ME} [OPTIONS] MAILDIR"
+    opt.banner = "Usage: #{ME} [OPTIONS]"
     opt.on('-d', '--duration SECS', Integer,
            "number of seconds allowed per mail [#{opts.limit}]") do
       |duration|
       opts.duration = duration
+    end
+    opt.on('-m', '--maildir MAILDIR', String,
+           "path to maildir to count") do
+      |maildir|
+      opts.maildir = maildir
+    end
+    opt.on('-c', '--command COMMAND', String,
+           "name of command to run to count mailbox size") do
+      |command|
+      opts.command = command
+    end
+    opt.on('-s', '--sleep NUMBER', Integer,
+           "seconds to sleep in between checks") do
+      |sleep|
+      opts.sleep = sleep
     end
     opt.on('-t', '--target NUMBER', Integer,
            "number of mails you are aiming to " +
@@ -106,16 +125,40 @@ def parse_args
 
   opt_parser.parse!
 
-  usage(opt_parser, "Must specify a maildir") unless ARGV.length == 1
-
-  maildir = ARGV[0]
-  dirs = [maildir] + %w(cur new tmp).map { |d| File.join(maildir, d) }
-  unless dirs.all? { |d| File.directory? d }
-    usage(opt_parser, "#{maildir} is not a valid maildir")
+  unless !!opts.maildir ^ !!opts.command
+    usage(opt_parser, "Must specify either --maildir or --command")
   end
-  puts "Using maildir: #{maildir}"
 
-  return opts, maildir
+  if opts.maildir
+    maildir = opts.maildir
+    dirs = [maildir] + %w(cur new tmp).map { |d| File.join(maildir, d) }
+    unless dirs.all? { |d| File.directory? d }
+      usage(opt_parser, "#{maildir} is not a valid maildir")
+    end
+    puts "Using maildir: #{maildir}"
+  end
+
+  return opts
+end
+
+def count_mailbox(opts)
+  if opts.maildir
+    count_maildir(opts.maildir)
+  else
+    stdout, stderr, status = Open3.capture3(opts.command)
+    if status != 0
+      $stderr.puts <<EOF
+Command #{opts.command} failed with exit code #{status}!
+STDOUT:
+#{stdout}
+STDERR:
+#{stderr}
+EOF
+      return 99999999999
+    end
+
+    return stdout.chomp.to_i
+  end
 end
 
 def count_maildir(maildir)
@@ -150,9 +193,9 @@ def duration(secs)
   r
 end
 
-def monitor_maildir(opts, maildir)
+def monitor_mailbox(opts)
   start_time = Time.now
-  initial_mail_count = count_maildir(maildir)
+  initial_mail_count = count_mailbox(opts)
   target = opts.target
   target_str = "%d mail%s" % [ target, target == 1 ? '' : 's' ]
 
@@ -163,7 +206,7 @@ def monitor_maildir(opts, maildir)
   while last_mail_count > target
     time_since_last_change = Time.now - last_change
     time_remaining = opts.duration - time_since_last_change
-    mail_count = count_maildir(maildir)
+    mail_count = count_mailbox(opts)
     if mail_count < last_mail_count
       last_change = Time.now
       processed = last_mail_count - mail_count
@@ -192,13 +235,13 @@ def monitor_maildir(opts, maildir)
     end
     last_mail_count = mail_count
     display(time_remaining, mail_count) if last_mail_count > target
-    sleep 1
+    sleep opts.sleep
   end
 end
 
 def main
-  opts, maildir = parse_args
-  monitor_maildir(opts, maildir)
+  opts = parse_args
+  monitor_mailbox(opts)
 end
 
 main
