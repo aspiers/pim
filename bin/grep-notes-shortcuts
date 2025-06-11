@@ -32,10 +32,10 @@ fi
 
 echo -e "# Title search\n"
 
-find $NOTES -type f | so | egrep "$@"
+find $NOTES -type f | so | grep -E "$@"
 
 #echo -e "\n`find $NOTES -type f | so | wc -l` files searched"
 
 echo -e "\n# Contents search:\n"
 
-egrep -r $switches "$@" $NOTES
+grep -Er $switches "$@" $NOTES
